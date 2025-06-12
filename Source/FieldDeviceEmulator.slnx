@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/_ref/">
+    <Project Path="../../Meadow.Contracts/Source/Meadow.Contracts/Meadow.Contracts.csproj" />
+    <Project Path="../../Meadow.Core/Source/implementations/desktop/Meadow.Desktop/Meadow.Desktop.csproj" />
+    <Project Path="../../Meadow.Core/Source/implementations/f7/Meadow.F7/Meadow.F7.csproj" />
+    <Project Path="../../Meadow.Core/Source/implementations/windows/Meadow.Windows/Meadow.Windows.csproj" />
+    <Project Path="../../Meadow.Core/Source/Meadow.Core/Meadow.Core.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Core/Meadow.Foundation.Core.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Libraries_and_Frameworks/Graphics.MicroGraphics/Driver/Graphics.MicroGraphics.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Libraries_and_Frameworks/Graphics.MicroLayout/Driver/Graphics.MicroLayout.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Libraries_and_Frameworks/Serialization.MicroJson/Driver/Serialization.MicroJson.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/Displays.Silk/Driver/Displays.Silk.csproj" />
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/ICs.DAC.Mcp492x/Driver/ICs.DAC.Mcp492x.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/mikroBus/C420T/Driver/C420T.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/VFDs.CerusXDrive/Driver/Motors.CerusXDrive.csproj" />
+    <Project Path="../../Meadow.Modbus/src/Meadow.Modbus/Meadow.Modbus.csproj" />
+  </Folder>
+  <Project Path="FieldDeviceEmulator.Core/FieldDeviceEmulator.Core.csproj" Id="39975a12-944d-4a02-8e0b-6c503be03863" />
+  <Project Path="FieldDeviceEmulator.Desktop/FieldDeviceEmulator.Desktop.csproj" Id="53c81928-560c-4a63-bcee-3db0d9a378b3" />
+  <Project Path="FieldDeviceEmulator.Tests/FieldDeviceEmulator.Tests.csproj" Id="43c22eac-29cb-4f58-994f-9649806dd5b8" />
+</Solution>

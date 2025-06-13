@@ -1,4 +1,4 @@
-﻿namespace FieldDeviceEmulator.Core.EmulatedDevices;
+﻿namespace FieldDeviceEmulator.Core;
 
 /// <summary>
 /// Specifies the current loop range for industrial sensors

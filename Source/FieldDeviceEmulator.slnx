@@ -16,6 +16,7 @@
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/mikroBus/C420T/Driver/C420T.csproj">
       <Deploy />
     </Project>
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/Sensors.Hid.Keyboard/Driver/Sensors.Hid.Keyboard.csproj" />
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/VFDs.CerusXDrive/Driver/Motors.CerusXDrive.csproj" />
     <Project Path="../../Meadow.Modbus/src/Meadow.Modbus/Meadow.Modbus.csproj" />
   </Folder>

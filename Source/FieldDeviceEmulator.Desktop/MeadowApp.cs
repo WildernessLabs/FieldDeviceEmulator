@@ -1,4 +1,5 @@
-﻿using Meadow;
+﻿using FieldDeviceEmulator.Core;
+using Meadow;
 using Meadow.Foundation.Displays;
 using System.Threading.Tasks;
 
@@ -6,23 +7,23 @@ namespace FieldDeviceEmulator;
 
 public class MeadowApp : App<Desktop>
 {
+    private MainController _mainController;
+
     public override Task Initialize()
     {
-        Resolver.Log.Info($"Initializing {this.GetType().Name}");
-        Resolver.Log.Info($" Platform OS is a {Device.PlatformOS.GetType().Name}");
-        Resolver.Log.Info($" Platform: {Device.Information.Platform}");
-        Resolver.Log.Info($" OS: {Device.Information.OSVersion}");
-        Resolver.Log.Info($" Model: {Device.Information.Model}");
-        Resolver.Log.Info($" Processor: {Device.Information.ProcessorType}");
-
         Device.Display?.Resize(320, 240, 2);
-        var displayController = new DisplayController(Device.Display!);
 
-        return base.Initialize();
+        var hardware = new DesktopEmulatorHardware(Device);
+        _mainController = new MainController();
+        return _mainController.Initialize(hardware);
+
     }
 
     public override Task Run()
     {
+        // this must be spawned in a worker because the UI needs the main thread
+        _ = _mainController.Run();
+
         // NOTE: this will not return until the display is closed
         ExecutePlatformDisplayRunner();
 

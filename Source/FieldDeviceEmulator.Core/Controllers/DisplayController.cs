@@ -1,22 +1,24 @@
 ﻿using Meadow;
 using Meadow.Foundation.Graphics;
 using Meadow.Foundation.Graphics.MicroLayout;
-using Meadow.Units;
 using System.Collections.Generic;
 
 namespace FieldDeviceEmulator.Core;
 
 public class DisplayController
 {
-    private readonly DisplayScreen? screen;
-    private readonly List<MicroLayout> navigationStack = new();
-    private int currentPage = 0;
-    private DisplayTheme? theme;
-    private AbsoluteLayout mainLayout;
+    private readonly DisplayScreen? _screen;
+    private readonly List<MicroLayout> _navigationStack = new();
+    private int _currentPage = 0;
+    private DisplayTheme? _theme;
+    private AbsoluteLayout _mainLayout;
+    private readonly IEmulatorHardware _hardware;
 
     public DisplayController(IEmulatorHardware hardware)
     {
-        if (hardware.Display != null)
+        _hardware = hardware;
+
+        if (_hardware.Display != null)
         {
             var theme = new DisplayTheme
             {
@@ -25,12 +27,12 @@ public class DisplayController
                 TextColor = Color.White
             };
 
-            screen = new DisplayScreen(
-                hardware.Display,
-                rotation: hardware.DisplayRotation,
+            _screen = new DisplayScreen(
+                _hardware.Display,
+                rotation: _hardware.DisplayRotation,
                 theme: theme);
 
-            GenerateLayout(screen);
+            GenerateLayout(_screen);
 
             UpdateDisplay();
         }
@@ -39,83 +41,103 @@ public class DisplayController
             Resolver.Log.Warn("Display is null");
         }
 
-        hardware.LeftButton.Clicked += OnPreviousRequested;
-        hardware.RightButton.Clicked += OnNextRequested;
+        _hardware.LeftButton.Clicked += OnPreviousRequested;
+        _hardware.RightButton.Clicked += OnNextRequested;
+        _hardware.UpButton.Clicked += OnUpClicked;
+        _hardware.DownButton.Clicked += OnDownClicked;
+    }
+
+    private async void OnDownClicked(object sender, System.EventArgs e)
+    {
+        if (_navigationStack[_currentPage] is IButtonSink buttonSink)
+        {
+            await buttonSink.OnDownClicked();
+        }
+    }
+
+    private async void OnUpClicked(object sender, System.EventArgs e)
+    {
+        if (_navigationStack[_currentPage] is IButtonSink buttonSink)
+        {
+            await buttonSink.OnUpClicked();
+        }
     }
 
     private void GenerateLayout(DisplayScreen screen)
     {
-        theme = new DisplayTheme
+        _theme = new DisplayTheme
         {
             BackgroundColor = Color.FromRgb(50, 50, 50)
         };
 
-        mainLayout = new AbsoluteLayout(0, 0, screen.Width, screen.Height);
+        _mainLayout = new AbsoluteLayout(0, 0, screen.Width, screen.Height);
 
-        navigationStack.Add(new VfdLayout(0, 0, screen.Width, screen.Height));
-        navigationStack.Add(new TempSenderLayout(0, 0.Fahrenheit(), 100.Fahrenheit(),
+        _navigationStack.Add(new VfdLayout(0, 0, screen.Width, screen.Height));
+        _navigationStack.Add(new TempSenderLayout(
+            0,
+            _hardware.TemperatureTransmitter,
             0, 0, screen.Width, screen.Height));
 
-        for (var i = 0; i < navigationStack.Count; i++)
+        for (var i = 0; i < _navigationStack.Count; i++)
         {
-            mainLayout.Controls.Add(navigationStack[i]);
-            navigationStack[i].IsVisible = (i == 0);
+            _mainLayout.Controls.Add(_navigationStack[i]);
+            _navigationStack[i].IsVisible = (i == 0);
         }
 
-        screen.Controls.Add(mainLayout);
+        screen.Controls.Add(_mainLayout);
 
-        for (var i = 0; i < navigationStack.Count; i++)
+        for (var i = 0; i < _navigationStack.Count; i++)
         {
-            navigationStack[i].ApplyTheme(theme);
+            _navigationStack[i].ApplyTheme(_theme);
         }
     }
 
     private void OnNextRequested(object sender, System.EventArgs e)
     {
-        if (screen == null) return;
+        if (_screen == null) return;
 
-        if (currentPage >= navigationStack.Count - 1) return;
+        if (_currentPage >= _navigationStack.Count - 1) return;
 
-        screen.BeginUpdate();
+        _screen.BeginUpdate();
 
-        navigationStack[currentPage].IsVisible = false;
-        currentPage++;
-        navigationStack[currentPage].IsVisible = true;
-        screen.EndUpdate();
+        _navigationStack[_currentPage].IsVisible = false;
+        _currentPage++;
+        _navigationStack[_currentPage].IsVisible = true;
+        _screen.EndUpdate();
     }
 
     private void OnPreviousRequested(object sender, System.EventArgs e)
     {
-        if (screen == null) return;
+        if (_screen == null) return;
 
-        if (currentPage <= 0) return;
+        if (_currentPage <= 0) return;
 
-        screen.BeginUpdate();
+        _screen.BeginUpdate();
 
-        navigationStack[currentPage].IsVisible = false;
-        currentPage--;
-        navigationStack[currentPage].IsVisible = true;
-        screen.EndUpdate();
+        _navigationStack[_currentPage].IsVisible = false;
+        _currentPage--;
+        _navigationStack[_currentPage].IsVisible = true;
+        _screen.EndUpdate();
     }
 
     private void OnHomeRequested(object sender, System.EventArgs e)
     {
-        if (screen == null) return;
+        if (_screen == null) return;
 
-        screen.BeginUpdate();
+        _screen.BeginUpdate();
 
-        if (currentPage > 0)
+        if (_currentPage > 0)
         {
-            navigationStack[currentPage].IsVisible = false;
+            _navigationStack[_currentPage].IsVisible = false;
         }
-        currentPage = 0;
-        navigationStack[currentPage].IsVisible = true;
-        screen.EndUpdate();
+        _currentPage = 0;
+        _navigationStack[_currentPage].IsVisible = true;
+        _screen.EndUpdate();
     }
 
     private void UpdateDisplay()
     {
-        if (screen == null) { return; }
+        if (_screen == null) { return; }
 
         // TODO: do things
     }

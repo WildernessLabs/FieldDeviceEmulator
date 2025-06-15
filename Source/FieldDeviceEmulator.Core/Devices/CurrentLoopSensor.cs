@@ -39,7 +39,7 @@ public abstract class CurrentLoopSensor
     /// <summary>
     /// Sets the currently set output current
     /// </summary>
-    protected Current GetOutputCurrent()
+    public Current GetOutputCurrent()
     {
         return _transmitter.GetOutputCurrent();
     }

@@ -3,10 +3,17 @@ using Meadow;
 using Meadow.Foundation.Graphics;
 using Meadow.Foundation.Graphics.MicroLayout;
 using Meadow.Units;
+using System.Threading.Tasks;
 
 namespace FieldDeviceEmulator.Core;
 
-public class TempSenderLayout : GridLayout
+public interface IButtonSink
+{
+    Task OnUpClicked();
+    Task OnDownClicked();
+}
+
+public class TempSenderLayout : GridLayout, IButtonSink
 {
     protected IFont LargeFont { get; }
     protected IFont SmallFont { get; }
@@ -15,6 +22,7 @@ public class TempSenderLayout : GridLayout
     public Temperature MaxTemp { get; }
 
     private readonly Label _tempLabel;
+    private readonly Label _mALabel;
     private readonly TemperatureTransmitter _temperatureTransmitter;
 
     public TempSenderLayout(
@@ -70,7 +78,7 @@ public class TempSenderLayout : GridLayout
         this.Add(decrementButton,
             4, 1);
 
-        _tempLabel = new Label(50, 30, $"{_temperatureTransmitter.GetCurrentTemperature().Fahrenheit:N0}F")
+        _tempLabel = new Label(50, 30, "--F")
         {
             TextColor = Color.White,
             HorizontalAlignment = HorizontalAlignment.Center
@@ -90,26 +98,71 @@ public class TempSenderLayout : GridLayout
             incrementButton,
             4, 3);
 
+        _mALabel = new Label(320, 20, $"--mA")
+        {
+            TextColor = Color.White,
+            Font = SmallFont,
+            HorizontalAlignment = HorizontalAlignment.Center,
+        };
         this.Add(
-            new Label(320, 20, $"18.5mA")
-            {
-                TextColor = Color.White,
-                Font = SmallFont,
-                HorizontalAlignment = HorizontalAlignment.Center,
-            },
+            _mALabel,
             7, 0, colspan: 5
             );
+
+        UpdateValues();
+    }
+
+    private void UpdateValues()
+    {
+        _tempLabel.Text = $"{_temperatureTransmitter.GetCurrentTemperature().Fahrenheit:N0}F";
+        _mALabel.Text = $"{_temperatureTransmitter.GetOutputCurrent().Milliamps:N1}mA";
+    }
+
+    public async Task Increment()
+    {
+        var temp = _temperatureTransmitter.GetCurrentTemperature().Fahrenheit;
+        if (temp <= _temperatureTransmitter.MaximumSenseTemp.Fahrenheit - 1)
+        {
+            await _temperatureTransmitter.SetTemperature((temp + 1).Fahrenheit());
+        }
+        else
+        { // because of double rounding
+            await _temperatureTransmitter.SetTemperature(_temperatureTransmitter.MaximumSenseTemp);
+        }
+        UpdateValues();
+    }
+
+    public async Task Decrement()
+    {
+        var temp = _temperatureTransmitter.GetCurrentTemperature().Fahrenheit;
+        if (temp >= _temperatureTransmitter.MinimumSenseTemp.Fahrenheit + 1)
+        {
+            await _temperatureTransmitter.SetTemperature((temp - 1).Fahrenheit());
+        }
+        else
+        { // because of double rounding
+            await _temperatureTransmitter.SetTemperature(_temperatureTransmitter.MinimumSenseTemp);
+        }
+        UpdateValues();
+    }
+
+    public async Task OnUpClicked()
+    {
+        await Increment();
+    }
+
+    public async Task OnDownClicked()
+    {
+        await Decrement();
     }
 
     private async void OnIncrementRequested(object sender, System.EventArgs e)
     {
-        var temp = _temperatureTransmitter.GetCurrentTemperature().Fahrenheit;
-        await _temperatureTransmitter.SetTemperature((temp + 1).Fahrenheit());
+        await Increment();
     }
 
     private async void OnDecrementRequested(object sender, System.EventArgs e)
     {
-        var temp = _temperatureTransmitter.GetCurrentTemperature().Fahrenheit;
-        await _temperatureTransmitter.SetTemperature((temp - 1).Fahrenheit());
+        await Decrement();
     }
 }

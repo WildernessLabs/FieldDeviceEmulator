@@ -1,9 +1,11 @@
 ﻿using FieldDeviceEmulator.Core;
+using FieldDeviceEmulator.Core.EmulatedDevices;
 using Meadow;
 using Meadow.Foundation.Sensors.Buttons;
 using Meadow.Foundation.Sensors.Hid;
 using Meadow.Peripherals.Displays;
 using Meadow.Peripherals.Sensors.Buttons;
+using Meadow.Units;
 
 namespace FieldDeviceEmulator;
 
@@ -17,6 +19,8 @@ internal class DesktopEmulatorHardware : IEmulatorHardware
     public IButton? UpButton { get; }
     public IButton? RightButton { get; }
     public IButton? LeftButton { get; }
+    public IButton? DownButton { get; }
+    public TemperatureTransmitter TemperatureTransmitter { get; }
 
     public DesktopEmulatorHardware(Desktop device)
     {
@@ -25,8 +29,15 @@ internal class DesktopEmulatorHardware : IEmulatorHardware
         keyboard = new Keyboard();
 
         UpButton = new PushButton(keyboard.Pins.Up);
+        DownButton = new PushButton(keyboard.Pins.Down);
         LeftButton = new PushButton(keyboard.Pins.Left);
         RightButton = new PushButton(keyboard.Pins.Right);
+
+        TemperatureTransmitter = new TemperatureTransmitter(
+            new SimulatedCurrentLoopTransmitter(0.012.Amps()),
+            CurrentLoopRange.Current_4_20,
+            0.Fahrenheit(),
+            100.Fahrenheit());
     }
 
 }

@@ -19,8 +19,14 @@
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/Sensors.Hid.Keyboard/Driver/Sensors.Hid.Keyboard.csproj" />
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/VFDs.CerusXDrive/Driver/Motors.CerusXDrive.csproj" />
     <Project Path="../../Meadow.Modbus/src/Meadow.Modbus/Meadow.Modbus.csproj" />
+    <Project Path="../../Meadow.ProjectLab/Source/Meadow.ProjectLab/Meadow.ProjectLab.csproj">
+      <Deploy />
+    </Project>
   </Folder>
   <Project Path="FieldDeviceEmulator.Core/FieldDeviceEmulator.Core.csproj" Id="39975a12-944d-4a02-8e0b-6c503be03863" />
   <Project Path="FieldDeviceEmulator.Desktop/FieldDeviceEmulator.Desktop.csproj" Id="53c81928-560c-4a63-bcee-3db0d9a378b3" />
+  <Project Path="FieldDeviceEmulator.ProjLab/FieldDeviceEmulator.ProjLab.csproj" Id="b7176869-509d-4a8b-a23b-0abb270f3ed8">
+    <Deploy />
+  </Project>
   <Project Path="FieldDeviceEmulator.Tests/FieldDeviceEmulator.Tests.csproj" Id="43c22eac-29cb-4f58-994f-9649806dd5b8" />
 </Solution>

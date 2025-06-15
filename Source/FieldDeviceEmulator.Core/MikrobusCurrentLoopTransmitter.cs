@@ -16,6 +16,15 @@ public class MikrobusCurrentLoopTransmitter : ICurrentLoopTransmitter
     /// <summary>
     /// Initializes a new instance of the MikrobusCurrentLoopTransmitter class
     /// </summary>
+    /// <param name="connector">The Mikrobus connector</param>
+    public MikrobusCurrentLoopTransmitter(MikroBusConnector connector)
+        : this(connector.SpiBus, connector.Pins.CS)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the MikrobusCurrentLoopTransmitter class
+    /// </summary>
     /// <param name="spiBus">The SPI bus for communication</param>
     /// <param name="chipSelect">The chip select pin</param>
     public MikrobusCurrentLoopTransmitter(ISpiBus spiBus, IPin chipSelect)

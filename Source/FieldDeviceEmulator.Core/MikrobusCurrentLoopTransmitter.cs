@@ -11,6 +11,7 @@ namespace FieldDeviceEmulator.Core.EmulatedDevices;
 public class MikrobusCurrentLoopTransmitter : ICurrentLoopTransmitter
 {
     private readonly C420T _transmitter;
+    private Current _lastCurrent;
 
     /// <summary>
     /// Initializes a new instance of the MikrobusCurrentLoopTransmitter class
@@ -20,6 +21,16 @@ public class MikrobusCurrentLoopTransmitter : ICurrentLoopTransmitter
     public MikrobusCurrentLoopTransmitter(ISpiBus spiBus, IPin chipSelect)
     {
         _transmitter = new C420T(spiBus, chipSelect);
+        SetOutputCurrent(0.004.Amps()).GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Gets the last output current that was set
+    /// </summary>
+    /// <returns>The current that was last output by this sensor</returns>
+    public Current GetOutputCurrent()
+    {
+        return _lastCurrent;
     }
 
     /// <summary>
@@ -30,6 +41,8 @@ public class MikrobusCurrentLoopTransmitter : ICurrentLoopTransmitter
     public Task SetOutputCurrent(Current current)
     {
         _transmitter.GenerateOutput(current);
+        _lastCurrent = current;
         return Task.CompletedTask;
     }
+
 }

@@ -92,4 +92,37 @@ public class TemperatureTransmitter : CurrentLoopSensor
         // Set the output current
         await SetOutputCurrent(new Current(outputMilliamps, Current.UnitType.Milliamps));
     }
+
+    /// <summary>
+    /// Gets the current temperature based on the last output current.
+    /// This method performs the reverse calculation of SetTemperature, converting
+    /// the current loop signal back to the corresponding temperature value.
+    /// </summary>
+    /// <returns>The temperature corresponding to the current output current</returns>
+    public Temperature GetCurrentTemperature()
+    {
+        var current = base.GetOutputCurrent();
+
+        // Determine current range based on loop type
+        double minCurrent = Range == CurrentLoopRange.Current_4_20 ? 4.0 : 0.0;
+        double maxCurrent = 20.0;
+
+        // Validate current is within expected range
+        if (current.Milliamps < minCurrent || current.Milliamps > maxCurrent)
+        {
+            throw new InvalidOperationException(
+                $"Output current {current.Milliamps}mA is outside expected range {minCurrent}-{maxCurrent}mA");
+        }
+
+        // Calculate the ratio of where current falls within the current span
+        double currentSpan = maxCurrent - minCurrent;
+        double currentPosition = current.Milliamps - minCurrent;
+        double currentRatio = currentSpan > 0 ? currentPosition / currentSpan : 0;
+
+        // Map the current ratio back to temperature span
+        double tempSpan = MaximumSenseTemp.Celsius - MinimumSenseTemp.Celsius;
+        double temperatureCelsius = MinimumSenseTemp.Celsius + (currentRatio * tempSpan);
+
+        return new Temperature(temperatureCelsius, Temperature.UnitType.Celsius);
+    }
 }

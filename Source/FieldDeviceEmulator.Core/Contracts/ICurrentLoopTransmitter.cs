@@ -14,4 +14,10 @@ public interface ICurrentLoopTransmitter
     /// <param name="current">The current to output</param>
     /// <returns>A task representing the asynchronous operation</returns>
     Task SetOutputCurrent(Current current);
+
+    /// <summary>
+    /// Gets the last output current that was set
+    /// </summary>
+    /// <returns>The current that was last output by this sensor</returns>
+    Current GetOutputCurrent();
 }

@@ -20,7 +20,9 @@ internal class DesktopEmulatorHardware : IEmulatorHardware
     public IButton? RightButton { get; }
     public IButton? LeftButton { get; }
     public IButton? DownButton { get; }
+
     public TemperatureTransmitter TemperatureTransmitter { get; }
+    public CerusXDrive VFD { get; }
 
     public DesktopEmulatorHardware(Desktop device)
     {

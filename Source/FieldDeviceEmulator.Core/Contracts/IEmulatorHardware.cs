@@ -15,4 +15,5 @@ public interface IEmulatorHardware
     IButton? LeftButton { get; }
 
     TemperatureTransmitter TemperatureTransmitter { get; }
+    CerusXDrive VFD { get; }
 }

@@ -8,6 +8,7 @@ namespace FieldDeviceEmulator.Core;
 public class VfdLayout : GridLayout
 {
     private readonly ModbusRtuFieldBus _modbus;
+    private readonly IEmulatorHardware _hardware;
 
     protected IFont LargeFont { get; }
 
@@ -16,9 +17,11 @@ public class VfdLayout : GridLayout
     {
         Resolver.Log.Info("Initializing VFD Layout...");
 
+        _hardware = hardware;
+
         _modbus = hardware.GetModbusFieldBus();
         _modbus.Connect();
-        _modbus.Add(hardware.VFD);
+        _modbus.Add(_hardware.VFD);
 
         LargeFont = new Font12x20();
         this.BackgroundColor = Color.FromRgb(50, 50, 50);
@@ -47,7 +50,7 @@ public class VfdLayout : GridLayout
             },
             1, 1);
         this.Add(
-            new Label(50, 30, "10A")
+            new Label(50, 30, $"{_hardware.VFD.OutputCurrent.Amps:N1}A")
             {
                 TextColor = Color.White,
                 HorizontalAlignment = HorizontalAlignment.Center
@@ -76,7 +79,7 @@ public class VfdLayout : GridLayout
             },
             2, 1);
         this.Add(
-            new Label(50, 30, "120.1V")
+            new Label(50, 30, $"{_hardware.VFD.OutputVoltage.Volts:N1}V")
             {
                 TextColor = Color.White,
                 HorizontalAlignment = HorizontalAlignment.Center

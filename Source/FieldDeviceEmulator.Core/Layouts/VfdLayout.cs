@@ -1,4 +1,5 @@
-﻿using Meadow;
+﻿using FieldDeviceEmulator.Core.EmulatedDevices;
+using Meadow;
 using Meadow.Foundation.Graphics;
 using Meadow.Foundation.Graphics.MicroLayout;
 
@@ -6,11 +7,19 @@ namespace FieldDeviceEmulator.Core;
 
 public class VfdLayout : GridLayout
 {
+    private readonly ModbusRtuFieldBus _modbus;
+
     protected IFont LargeFont { get; }
 
-    public VfdLayout(int left, int top, int width, int height)
+    public VfdLayout(IEmulatorHardware hardware, int left, int top, int width, int height)
         : base(left, top, width, height, 6, 4)
     {
+        Resolver.Log.Info("Initializing VFD Layout...");
+
+        _modbus = hardware.GetModbusFieldBus();
+        _modbus.Connect();
+        _modbus.Add(hardware.VFD);
+
         LargeFont = new Font12x20();
         this.BackgroundColor = Color.FromRgb(50, 50, 50);
 

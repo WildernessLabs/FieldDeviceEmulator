@@ -1,4 +1,5 @@
-﻿using Meadow.Hardware;
+﻿using Meadow;
+using Meadow.Hardware;
 using Meadow.Modbus;
 using System;
 using System.Collections.Concurrent;
@@ -44,6 +45,8 @@ public class ModbusRtuFieldBus : IDisposable
     {
         try
         {
+            Resolver.Log.Info($"Modbus Read Holding Registers Request: Address={modbusAddress}, Start={startRegister}, Length={length}");
+
             // Validate parameters
             if (length <= 0 || length > 125)
                 return new ModbusErrorResult(ModbusErrorCode.IllegalDataValue);

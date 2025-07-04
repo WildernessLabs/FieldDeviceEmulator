@@ -1,5 +1,6 @@
 ﻿using FieldDeviceEmulator.Core;
 using FieldDeviceEmulator.Core.EmulatedDevices;
+using Meadow;
 using Meadow.Devices;
 using Meadow.Peripherals.Displays;
 using Meadow.Peripherals.Sensors.Buttons;
@@ -38,8 +39,11 @@ public class ProjectLabEmulatorHardware : IEmulatorHardware
 
     public ModbusRtuFieldBus GetModbusFieldBus()
     {
+        Resolver.Log.Info("Getting Modbus RTU Field Bus for Project Lab Emulator Hardware.");
+
         if (_modbusFieldBus is null)
         {
+            Resolver.Log.Info("Creating Modbus RTU Field Bus for Project Lab Emulator Hardware.");
             _modbusFieldBus = new ModbusRtuFieldBus(_hardware.Rs485Connector.CreateSerialPort(9600));
         }
 

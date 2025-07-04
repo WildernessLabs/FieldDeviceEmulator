@@ -14,6 +14,8 @@ public interface IEmulatorHardware
     IButton? RightButton { get; }
     IButton? LeftButton { get; }
 
+    ModbusRtuFieldBus GetModbusFieldBus();
+
     TemperatureTransmitter TemperatureTransmitter { get; }
     CerusXDrive VFD { get; }
 }

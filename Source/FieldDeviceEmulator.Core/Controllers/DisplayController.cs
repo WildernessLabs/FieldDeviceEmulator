@@ -72,7 +72,7 @@ public class DisplayController
 
         _mainLayout = new AbsoluteLayout(0, 0, screen.Width, screen.Height);
 
-        _navigationStack.Add(new VfdLayout(0, 0, screen.Width, screen.Height));
+        _navigationStack.Add(new VfdLayout(_hardware, 0, 0, screen.Width, screen.Height));
         _navigationStack.Add(new TempSenderLayout(
             0,
             _hardware.TemperatureTransmitter,

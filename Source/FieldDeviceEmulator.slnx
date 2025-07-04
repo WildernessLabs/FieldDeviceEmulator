@@ -13,6 +13,9 @@
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/ICs.DAC.Mcp492x/Driver/ICs.DAC.Mcp492x.csproj">
       <Deploy />
     </Project>
+    <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/ICs.IOExpanders.Sc16is7x2/Driver/ICs.IOExpanders.Sc16is7x2.csproj">
+      <Deploy />
+    </Project>
     <Project Path="../../Meadow.Foundation/Source/Meadow.Foundation.Peripherals/mikroBus/C420T/Driver/C420T.csproj">
       <Deploy />
     </Project>

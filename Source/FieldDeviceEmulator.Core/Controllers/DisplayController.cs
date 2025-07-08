@@ -8,7 +8,7 @@ namespace FieldDeviceEmulator.Core;
 public class DisplayController
 {
     private readonly DisplayScreen? _screen;
-    private readonly List<MicroLayout> _navigationStack = new();
+    private readonly List<LayoutBase> _navigationStack = new();
     private int _currentPage = 0;
     private DisplayTheme? _theme;
     private AbsoluteLayout _mainLayout;

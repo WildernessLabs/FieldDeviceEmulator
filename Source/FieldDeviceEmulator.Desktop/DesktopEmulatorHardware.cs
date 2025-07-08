@@ -42,4 +42,8 @@ internal class DesktopEmulatorHardware : IEmulatorHardware
             100.Fahrenheit());
     }
 
+    public ModbusRtuFieldBus GetModbusFieldBus()
+    {
+        throw new System.NotImplementedException();
+    }
 }
